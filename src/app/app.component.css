@@ -1,0 +1,20 @@
+.content {
+    margin-left: 250px; /* Ajuste baseado na largura do seu sidebar */
+    padding: 20px;
+  }
+
+  .user-content {
+    display: flex;
+    justify-content: space-around; /* Isso distribuirá o espaço uniformemente ao redor dos itens */
+    align-items: flex-start; /* Isso alinhará os itens ao início do container */
+  }
+  
+  /* Opcional: Estilos adicionais para melhorar a visualização */
+  user-registration, app-user-list {
+    flex-basis: 48%; /* Isso define uma base para os itens ocuparem quase metade do espaço disponível, com um pouco de espaço entre eles */
+  }
+  
+  .content {
+    margin: 20px; /* Espaçamento ao redor do conteúdo principal */
+  }
+  
