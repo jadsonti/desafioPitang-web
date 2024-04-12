@@ -68,7 +68,7 @@ form {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Certifique-se de que os paddings e bordas estão incluídos na largura total */
+    box-sizing: border-box; 
   }
   
   input[type="text"]:focus,
@@ -78,24 +78,24 @@ form {
   input[type="number"]:focus,
   select:focus,
   textarea:focus {
-    border-color: #007bff; /* Cor de destaque ao focar */
-    outline: none; /* Remove o contorno padrão do navegador */
+    border-color: #007bff; 
+    outline: none; 
   }
   
   button,
   input[type="submit"] {
-    background-color: #007bff; /* Cor de fundo dos botões */
+    background-color: #007bff; 
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    text-transform: uppercase; /* Estilo opcional para tornar o texto do botão maiúsculo */
+    text-transform: uppercase; 
   }
   
   button:hover,
   input[type="submit"]:hover {
-    background-color: #0056b3; /* Cor mais escura ao passar o mouse */
+    background-color: #0056b3; 
   }
   
   /* Estilos adicionais para alinhamento e layout do formulário */
@@ -113,34 +113,31 @@ form {
   }
   
   .app-sidebar {
-    width: 250px; /* Largura fixa para o sidebar */
+    width: 250px; 
     height: 100vh;
-    /* Estilos adicionais do sidebar */
   }
   
   .main-content {
-    flex-grow: 1; /* Ocupa o espaço restante */
+    flex-grow: 1; 
     display: flex;
-    flex-direction: column; /* Organiza os filhos do main-content em coluna */
-    align-items: center; /* Centraliza os filhos horizontalmente */
+    flex-direction: column; 
+    align-items: center; 
     padding: 20px;
     margin-left: 40px;
   }
   
   .container {
     max-width: 1200px;
-    width: 100%; /* Garante que o container respeite o max-width e o width */
-    /* Restante dos seus estilos */
+    width: 100%; 
   }
   
   .user-content {
     display: flex;
-    justify-content: space-around; /* Espaço ao redor dos elementos */
-    width: 100%; /* Ocupa a largura total do container */
+    justify-content: space-around; 
+    width: 100%; 
   }
   
   user-registration, app-user-list {
-    width: 48%; /* Cada um ocupa aproximadamente metade do espaço */
-    /* Restante dos seus estilos */
+    width: 48%; 
   }
   

@@ -1,17 +1,16 @@
-// user-state.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from './models/user-model'; // Atualize o caminho conforme necessário
+import { User } from './models/user-model'; // Verifique se o caminho está correto
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserStateService {
   private usersSubject = new BehaviorSubject<User[]>([]);
-  private editingUserId = new BehaviorSubject<number | null>(null);
+  private editingUserSubject = new BehaviorSubject<User | null>(null);
+  
   users$ = this.usersSubject.asObservable();
-  editingUserId$ = this.editingUserId.asObservable();
-
+  editingUser$ = this.editingUserSubject.asObservable();
 
   constructor() {}
 
@@ -24,7 +23,28 @@ export class UserStateService {
     this.usersSubject.next(users);
   }
 
-  setEditingUserId(id: number | null): void {
-    this.editingUserId.next(id);
+  selectUserForEdit(user: User) {
+    this.editingUserSubject.next(user);
+  }
+
+  clearEditingUser() {
+    this.editingUserSubject.next(null);
+  }
+
+  getCurrentEditingUserId(): number | null {
+    const currentUser = this.editingUserSubject.value;
+    return currentUser ? currentUser.id : null;
+  }
+
+  updateUser(updatedUser: User) {
+    const users = this.usersSubject.value;
+    const updatedUsers = users.map(user => user.id === updatedUser.id ? updatedUser : user);
+    this.usersSubject.next(updatedUsers);
+  }
+
+  removeUser(id: number) {
+    const currentUsers = this.usersSubject.value;
+    const updatedUsers = currentUsers.filter(user => user.id !== id);
+    this.usersSubject.next(updatedUsers);
   }
 }

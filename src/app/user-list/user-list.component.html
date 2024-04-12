@@ -3,11 +3,10 @@
       <li *ngFor="let user of users">
 
         {{ user.firstName }} {{ user.lastName }} - {{ user.email }}
-        <!-- Botão para remover o usuário -->
         <button (click)="removeUser(user.id)">Remove</button>
-        <button (click)="showUserDetails(user)">Ver Detalhes</button>      
+        <button (click)="showUserDetails(user)">Ver Detalhes</button>    
+        <button (click)="editUser(user)">Editar</button>  
       </li>
     </ul>
   
-<!-- Modal de detalhes do usuário -->
 <app-user-details-modal #userDetailsModal></app-user-details-modal>

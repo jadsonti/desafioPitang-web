@@ -3,6 +3,8 @@ import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import { UserDetailsModalComponent } from '../user-details-modal/user-details-modal.component';
 import { UserStateService } from '../user-state.service';
+import { User } from '../models/user-model';
+
 
 
 @Component({
@@ -25,10 +27,14 @@ export class UsersListComponent implements OnInit {
     });
 
     this.userStateService.users$.subscribe(users => {
-      this.users = users; // Atualiza a lista local de usuários quando houver uma mudança no estado
+      this.users = users; 
     });
 
     this.loadUsers();
+    this.subscribeToUserUpdates();
+    this.userStateService.users$.subscribe(users => {
+    this.users = users;
+    });
 
   }
 
@@ -54,8 +60,18 @@ export class UsersListComponent implements OnInit {
     });
   }
 
-  loadUsers() {
-    this.userService.getAllUsers().subscribe(data => this.users = data);
+  loadUsers(): void {
+    this.userService.getAllUsers().subscribe(users => {
+      this.userStateService.setUsers(users);
+    }, error => {
+      console.error('There was an error!', error);
+    });
+  }
+
+  subscribeToUserUpdates(): void {
+    this.userStateService.users$.subscribe(users => {
+      this.users = users;
+    });
   }
 
   showUserDetails(user: any) {
@@ -66,12 +82,15 @@ export class UsersListComponent implements OnInit {
     this.userService.removeUserById(id).subscribe({
       next: (response) => {
         console.log('User removed successfully', response);
-        // Remova o usuário da lista de usuários no cliente
         this.users = this.users.filter(user => user.id !== id);
       },
       error: (error) => {
         console.error('Error removing user', error);
       }
     });
+  }
+
+  editUser(user: User): void {
+    this.userStateService.selectUserForEdit(user);
   }
 }

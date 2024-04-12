@@ -7,7 +7,7 @@
         <label for="login">Login</label>
         <input type="text" formControlName="login" id="login" class="form-control">
     </div>
-    <div class="form-group">
+    <div *ngIf="!isEditMode" class="form-group">
         <label for="password">Password</label>
         <input type="password" formControlName="password" id="password" class="form-control">
     </div>
@@ -30,22 +30,29 @@
     </div>
     <!-- Campos para o carro -->
     <h3>Car Information</h3>
-    <div class="form-group">
+    <!-- Seção para carros -->
+  <div formArrayName="cars">
+    <div *ngFor="let car of cars.controls; let i = index" [formGroupName]="i">
+      <div class="form-group">
         <label for="manufactureYear">Manufacture Year</label>
         <input type="number" formControlName="manufactureYear" id="manufactureYear" class="form-control">
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="licensePlate">License Plate</label>
         <input type="text" formControlName="licensePlate" id="licensePlate" class="form-control">
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="model">Model</label>
         <input type="text" formControlName="model" id="model" class="form-control">
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="color">Color</label>
         <input type="text" formControlName="color" id="color" class="form-control">
+        <button type="button" (click)="addCarGroup()">Add other car</button>
     </div>
+    </div>
+  </div>
+
     
     <!-- Mensagem de erro -->
   <div *ngIf="errorMessage" class="alert alert-danger">

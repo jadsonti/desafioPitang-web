@@ -1,77 +1,119 @@
-import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { UserService } from '../user.service';
 import { UserStateService } from '../user-state.service';
+import { formatDate } from '@angular/common';  
 
 @Component({
-  selector: 'user-registration', 
+  selector: 'user-registration',
   templateUrl: './user-registration.component.html',
   styleUrls: ['./user-registration.component.css']
 })
 export class UserRegistrationComponent implements OnInit {
   registerForm: FormGroup;
-  isEditMode = false; 
+  isEditMode = false;
   errorMessage: string = '';
-  successMessage: string = ''; 
+  successMessage: string = '';
 
-
-
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private userStateService: UserStateService, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private userStateService: UserStateService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    this.initializeForm();
+    this.subscribeToEditingUser();
+  }
+
+  initializeForm(): void {
     this.registerForm = this.formBuilder.group({
+      id: [''],
       email: ['', [Validators.required, Validators.email]],
       login: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       birthday: ['', Validators.required],
       phone: ['', Validators.required],
-      // Informações do carro
-      manufactureYear: ['', Validators.required],
-      licensePlate: ['', Validators.required],
-      model: ['', Validators.required],
-      color: ['', Validators.required]
+      cars: this.formBuilder.array([]),
+      password: ['', [Validators.minLength(6)]]
     });
+    this.addCarGroup();
+  }
+
+  formatISODateToDateInput(value: string): string {
+    if (!value) return '';
+    const date = new Date(value);
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
+
+  subscribeToEditingUser(): void {
+    this.userStateService.editingUser$.subscribe(user => {
+      this.isEditMode = !!user;
+      this.registerForm.reset();
+      this.cars.clear();
+      if (user) {
+        user.birthday = this.formatISODateToDateInput(user.birthday);
+        this.registerForm.patchValue(user);
+        user.cars.forEach(car => this.addCarGroup(car));
+      } else {
+        this.addCarGroup(); 
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
+  get cars(): FormArray {
+    return this.registerForm.get('cars') as FormArray;
+  }
+
+  createCarGroup(car?: any): FormGroup {
+    return this.formBuilder.group({
+      manufactureYear: [car?.manufactureYear || '', Validators.required],
+      licensePlate: [car?.licensePlate || '', Validators.required],
+      model: [car?.model || '', Validators.required],
+      color: [car?.color || '', Validators.required],
+    });
+  }
+
+  addCarGroup(car?: any): void {
+    this.cars.push(this.createCarGroup(car));
+  }
+
+  removeCarGroup(index: number): void {
+    this.cars.removeAt(index);
   }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      const userData = {
-        email: this.registerForm.value.email,
-        login: this.registerForm.value.login,
-        password: this.registerForm.value.password,
-        firstName: this.registerForm.value.firstName,
-        lastName: this.registerForm.value.lastName,
-        birthday: this.registerForm.value.birthday,
-        phone: this.registerForm.value.phone,
-        cars: [{
-          manufactureYear: this.registerForm.value.year,
-          licensePlate: this.registerForm.value.licensePlate,
-          model: this.registerForm.value.model,
-          color: this.registerForm.value.color
-        }]
-      };
+      const userData = this.registerForm.value;
+      const action$ = this.isEditMode
+        ? this.userService.updateUser(userData.id, userData)
+        : this.userService.registerUser(userData);
 
-      this.userService.registerUser(userData).subscribe({
+      action$.subscribe({
         next: (response) => {
-          this.successMessage = 'User registered successfully';
-          this.errorMessage = ''; // Limpa a mensagem de erro
+          this.successMessage = this.isEditMode ? 'User updated successfully' : 'User registered successfully';
+          this.registerForm.reset();
+          this.cars.clear();
+          this.addCarGroup(); 
+          this.isEditMode = false;
+          this.cdr.detectChanges(); 
+          setTimeout(() => this.successMessage = '', 2500);
         },
-        error: (error) => {
-          console.error('Registration error', error);
-          this.errorMessage = error; // Aqui você atribui diretamente o erro retornado pelo service
-          this.successMessage = ''; // Limpa a mensagem de sucesso
-        }
+        error: (error) => this.processError(error)
       });
     } else {
       this.errorMessage = 'Please fill out the form correctly.';
-      this.successMessage = ''; // Limpa a mensagem de sucesso
     }
+  }
 
-
-
-
-    
+  private processError(error: any): void {
+    console.error('Error processing request', error);
+    this.errorMessage = error.error.message || 'An unexpected error occurred';
   }
 }
