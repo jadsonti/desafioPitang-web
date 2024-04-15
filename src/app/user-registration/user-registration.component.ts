@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { UserService } from '../user.service';
 import { UserStateService } from '../user-state.service';
 import { formatDate } from '@angular/common';  
+import { ActivatedRoute, Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'user-registration',
@@ -16,15 +19,44 @@ export class UserRegistrationComponent implements OnInit {
   successMessage: string = '';
 
   constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
     private formBuilder: FormBuilder,
     private userService: UserService,
     private userStateService: UserStateService,
     private cdr: ChangeDetectorRef
-  ) { }
-
+  ) {}
   ngOnInit(): void {
     this.initializeForm();
     this.subscribeToEditingUser();
+    this.loadUserDataIfEditing();
+    const userId = this.route.snapshot.params['id']; 
+  if (userId) {
+    this.loadUserForEdit(userId);
+  }
+  this.subscribeToEditingUser();
+  }
+
+  loadUserForEdit(userId: number): void {
+    this.userService.getUserById(userId).subscribe(
+      user => {
+        this.registerForm.patchValue(user);
+        this.isEditMode = true;
+      },
+      error => console.error('Error loading user', error)
+    );
+  }
+
+  loadUserDataIfEditing(): void {
+    const userId = this.route.snapshot.params['id'];
+    if (userId) {
+      this.userService.getUserById(userId).subscribe(
+        user => {
+          this.registerForm.patchValue(user);
+        },
+        error => console.error('Erro ao carregar os dados do usuário', error)
+      );
+    }
   }
 
   initializeForm(): void {

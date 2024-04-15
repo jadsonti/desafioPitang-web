@@ -1,3 +1,7 @@
 <div class="sidebar">
-  <button (click)="reloadPage()">Home</button> 
+  <a routerLink="/users">HOME</a>
+  <a routerLink="/login" *ngIf="!isLoggedIn">LOGIN</a>
+  <a routerLink="/register" *ngIf="!isLoggedIn">REGISTRE-SE</a>
+  <a routerLink="/user-profile" *ngIf="isLoggedIn">MEU PERFIL</a> 
+  <a (click)="logout()" *ngIf="isLoggedIn">SAIR</a> 
 </div>

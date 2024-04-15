@@ -1,68 +1,97 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" formControlName="email" id="email" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="login">Login</label>
-        <input type="text" formControlName="login" id="login" class="form-control">
-    </div>
-    <div *ngIf="!isEditMode" class="form-group">
-        <label for="password">Password</label>
-        <input type="password" formControlName="password" id="password" class="form-control">
-    </div>
-    <!-- Continuação dos campos anteriores -->
-    <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input type="text" formControlName="firstName" id="firstName" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input type="text" formControlName="lastName" id="lastName" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="birthday">Birthday</label>
-        <input type="date" formControlName="birthday" id="birthday" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="phone">Phone</label>
-        <input type="text" formControlName="phone" id="phone" class="form-control">
-    </div>
-    <!-- Campos para o carro -->
-    <h3>Car Information</h3>
-    <!-- Seção para carros -->
-  <div formArrayName="cars">
-    <div *ngFor="let car of cars.controls; let i = index" [formGroupName]="i">
-      <div class="form-group">
-        <label for="manufactureYear">Manufacture Year</label>
-        <input type="number" formControlName="manufactureYear" id="manufactureYear" class="form-control">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" formControlName="email" id="email" class="form-control">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="licensePlate">License Plate</label>
-        <input type="text" formControlName="licensePlate" id="licensePlate" class="form-control">
+      <div class="col">
+        <div class="form-group">
+          <label for="login">Login</label>
+          <input type="text" formControlName="login" id="login" class="form-control">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="model">Model</label>
-        <input type="text" formControlName="model" id="model" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="color">Color</label>
-        <input type="text" formControlName="color" id="color" class="form-control">
-        <button type="button" (click)="addCarGroup()">Add other car</button>
     </div>
-    </div>
-  </div>
-
-    
-    <!-- Mensagem de erro -->
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
   
-  <!-- Mensagem de sucesso -->
-  <div *ngIf="successMessage" class="alert alert-success">
-    {{ successMessage }}
-  </div>
+    <div class="row" *ngIf="!isEditMode">
+      <div class="col">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" formControlName="password" id="password" class="form-control">
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" formControlName="firstName" id="firstName" class="form-control">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" formControlName="lastName" id="lastName" class="form-control">
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="birthday">Birthday</label>
+          <input type="date" formControlName="birthday" id="birthday" class="form-control">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="text" formControlName="phone" id="phone" class="form-control">
+        </div>
+      </div>
+    </div>
+  
+    <h3>Car Information</h3>
+    <div formArrayName="cars">
+      <div *ngFor="let car of cars.controls; let i = index" [formGroupName]="i" class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="manufactureYear">Manufacture Year</label>
+            <input type="number" formControlName="manufactureYear" id="manufactureYear" class="form-control">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="licensePlate">License Plate</label>
+            <input type="text" formControlName="licensePlate" id="licensePlate" class="form-control">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" formControlName="model" id="model" class="form-control">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" formControlName="color" id="color" class="form-control">
+            <button type="button" (click)="addCarGroup()">Add other car</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  
     <button type="submit" class="btn btn-primary">Register</button>
   </form>
   

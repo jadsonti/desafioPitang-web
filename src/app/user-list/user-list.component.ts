@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { UserDetailsModalComponent } from '../user-details-modal/user-details-modal.component';
 import { UserStateService } from '../user-state.service';
 import { User } from '../models/user-model';
+import { Router } from '@angular/router';
+
 
 
 
@@ -17,7 +19,7 @@ export class UsersListComponent implements OnInit {
 
   @ViewChild('userDetailsModal') userDetailsModal: UserDetailsModalComponent;
 
-  constructor(private userService: UserService, private userStateService: UserStateService) { }
+  constructor(private userService: UserService, private userStateService: UserStateService, private router: Router,) { }
 
   ngOnInit(): void {
     this.userService.getAllUsers().subscribe(data => {
@@ -92,5 +94,7 @@ export class UsersListComponent implements OnInit {
 
   editUser(user: User): void {
     this.userStateService.selectUserForEdit(user);
+    this.router.navigate(['/edit', user.id]); 
   }
+  
 }

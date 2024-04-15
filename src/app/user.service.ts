@@ -65,4 +65,11 @@ export class UserService {
     }
     return throwError(errorMessage);
   }
+
+  getUserProfile(): Observable<any> {
+    const token = localStorage.getItem('jwt');
+    return this.http.get(`${this.apiUrl}/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

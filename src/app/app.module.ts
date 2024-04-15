@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { UsersListComponent } from './user-list/user-list.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { UserDetailsModalComponent } from './user-details-modal/user-details-modal.component';
+import { LoginComponent } from './login/login.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { UserDetailsModalComponent } from './user-details-modal/user-details-mod
     UserRegistrationComponent,
     UsersListComponent,
     SidebarComponent,
-    UserDetailsModalComponent
+    UserDetailsModalComponent,
+    LoginComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

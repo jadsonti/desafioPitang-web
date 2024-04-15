@@ -1,0 +1,23 @@
+<div *ngIf="user; else loading">
+    <h1>User Profile</h1>
+    <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Login:</strong> {{ user.login }}</p>
+    <p><strong>Birthday:</strong> {{ user.birthday | date: 'yyyy-MM-dd' }}</p>
+    <p><strong>Phone:</strong> {{ user.phone }}</p>
+    <p><strong>Created At:</strong> {{ user.createdAt | date: 'yyyy-MM-dd HH:mm' }}</p>
+    <p><strong>Last Login:</strong> {{ user.lastLogin | date: 'yyyy-MM-dd HH:mm' }}</p>
+    <div *ngIf="user.cars && user.cars.length">
+        <h3>Cars:</h3>
+        <ul>
+            <li *ngFor="let car of user.cars">
+                {{ car.manufactureYear }} {{ car.model }} - {{ car.color }} ({{ car.licensePlate }})
+            </li>
+        </ul>
+    </div>
+</div>
+
+<ng-template #loading>
+    <p>Loading user profile...</p>
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+</ng-template>
